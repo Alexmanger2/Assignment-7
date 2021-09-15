@@ -1,54 +1,91 @@
 import React, { Component } from 'react';
-import './SearchField.css';
+//import './SearchField.css';
+import axios from 'axios'
+//import 'bootstrap/dist/css/bootstrap.min.css'
+
+
 class SearchField extends Component {
     
     constructor(){
         super();
         this.state={
-            gifs:[]
+            search:[],
+            searchInput: "",
+            show : false
+
         }
-        this.gifByKeyword=this.gifByKeyword.bind(this)
+        
       }
-      gifByKeyword = async (searchTerm) => {
-        console.log("In Mount")
-        const url = ("https://api.giphy.com/v1/gifs/search?q=") + searchTerm + ("&api_key=d9yzq75PA0Fdy2XP84jqHK2mLIxw4H2k");
-        const response = await fetch(url);
-        console.log(response);
-        const gifData = await response.json();
+    
+    onChange = (event) => {
         this.setState({
-            gifs: gifData.data
-        });
-    }
-    handleSearchChange = (event) =>{
-        let name = event.target.name;
-        let value = event.target.value;
-        this.setState({
-            [name]: value
-        })
-        let searchVar = document.getElementById('search').value
-        this.gifByKeyword(searchVar)
-    }
-       
+          searchInput: event.target.value
+         });
+      }
+
+
+    handleSearch = (event) =>{
+        event.preventDefault();
+        const searchInput = this.state.searchInput;
+        const API_KEY = "HJ7Y0riiQ86ysZe4Vh0Qq8uNClbRBAJS";
+        const url = "http://api.giphy.com/v1/gifs/search?q=" + searchInput + "&api_key=" + API_KEY;
+        axios
+          .get(url)
+          .then((response) =>{
+           this.setState({search: response.data.data});
+           this.setState({show : true});
+          })
+          .catch((err) => {
+            this.setState({show : false});
+            console.log(err);
+          });
+          //this.setState({show : true});
+      }
+
+
        render(){
-        console.log("In Render")
-        return (
-            <>
-          <div className="container"> 
-          {/* <br></br> */}
-          <input id='search' placeholder="Search for a gif..." height="100"></input>
-          <button id="searchButton" type='button' onClick={this.handleSearchChange}>Search</button>
-            {
-            (<div>
-                {this.state.gifs.map(gvalue =>
+    
+        let display;
+
+        if(this.state.show === true){
+
+              display =  
+                    <div>
+                {this.state.search.map(data => {
+                    return (
                     <div className="gif-images">
-                        <img src = {gvalue.images.original.url}/>
+                    <img src = {data.images.original.url}/> 
+                     </div>)
+                })}
                     </div>
-                )}
-            </div>)
-            }
+
+        }
+        if(this.state.show === false){
+            
+            display = null;
+
+        }
+        
+
+        return (
+            
+          <div className="container"> 
+        
+            <form onChange= {this.onChange}>
+            <input type="text"/>
+          <button id="searchButton" type="submit" value = {this.handleSearch} onClick={this.handleSearch}>Search</button>
+          
+          </form>
+            
+            
+            <div>
+                {display}
             </div>
-          </>
+
+        </div>
         ); 
       } 
     }
 export default SearchField;
+
+

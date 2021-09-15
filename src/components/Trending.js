@@ -1,36 +1,69 @@
 import './Trending.css';
-import React from 'react';
+import React, { Component } from 'react'
+import axios from 'axios'
 
-class Trending extends React.Component{
+class Trending extends Component{
   constructor(){
     super();
     this.state={
-        gifs:[]
+        trending:[],
+        show: false
     } 
-    this.componentDidMount=this.componentDidMount.bind(this)
   } 
-  componentDidMount(){
-    console.log("In Mount")
-    fetch("http://api.giphy.com/v1/gifs/trending?api_key=d9yzq75PA0Fdy2XP84jqHK2mLIxw4H2k")
-    .then(response => response.json())
-    .then(res => {this.setState({gifs: res.data })});
-    console.log(this.state.gifs)
-  }
-  componentDidUpdate(prevProps, prevState) {
-    console.log(this.state.gifs)
+  
+  handleTrending = () =>{
+    const API_KEY = "HJ7Y0riiQ86ysZe4Vh0Qq8uNClbRBAJS";
+    const url = "http://api.giphy.com/v1/gifs/trending?api_key=" + API_KEY;
+     axios
+       .get(url)
+       .then((response) =>{
+         this.setState({show: true})
+         this.setState({trending: response.data.data});
+         
+       })
+       .catch((err) => {
+        this.setState({show: false})
+         console.log(err);
+       });
+      // this.setState({show: true})
    }
+
+
+
   render(){
-    console.log("In Render")
+    
+    let display;
+
+    if(this.state.show === true){
+      display = <div className="gif-container"> 
+      {this.state.trending.map(element=>{
+        console.log(element.url);
+        return <div className="gif-img"><img src={element.images.original.url}/></div>
+      })}
+      
+      </div> 
+    }
+
+    if(this.state.show === false){
+
+        display = null;
+
+    }
+
     return (
-      <> 
-        <div className="gif-container"> 
-          {this.state.gifs.map(element=>{
-            console.log(element.url);
-            return <div className="gif-img"><img src={element.images.original.url} alt='gif'/></div>
-          })}
-          {/* <img src="https://i.redd.it/jeuusd992wd41.jpg"></img> */}
-          </div> 
-      </>
+
+
+      <div className="trend">
+      <button onClick={this.handleTrending}>Trending</button>
+      
+          <div>
+            
+              {display}
+              
+          </div>
+     
+  </div>
+  
     );
   }
 }

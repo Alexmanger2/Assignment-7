@@ -1,3 +1,4 @@
+/*
 .App {
   text-align: center;
   background-color: black;
@@ -37,3 +38,59 @@
     transform: rotate(360deg);
   }
 }
+
+*/
+
+body{
+  background-color: lightgoldenrodyellow;
+}
+h1{
+  text-align:center;
+  color: whitesmoke;
+  background-color: lightcoral;
+  height: 66px;
+  padding-top: 25px;
+  width:100%;
+  margin:0 auto;
+  
+}
+
+.container{
+  text-align: center;
+  /*text-align: end;
+  padding-right: 250px;
+  */
+ 
+
+}
+
+.trend {
+  
+  text-align: center;
+  
+}
+
+.random{
+ text-align: center;
+
+  
+}
+
+.gif-img{ 
+  display: inline-flex;
+  
+}
+
+img{
+  height:250px;
+  width:250px;
+  margin-right: 10px;
+  margin-left:10px;
+} 
+
+
+.gif-images {
+  display: inline-flex;
+ 
+}
+

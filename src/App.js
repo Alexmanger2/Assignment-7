@@ -5,15 +5,19 @@ import GifCard from './components/GifCard';
 import Trending from './components/Trending';
 import { Component } from 'react';
 
+
 function App() {
   return (
     <div className="App">
-      <h1>GIPHY</h1>
+      
+      <h1>Image Search</h1>
+      <div>
+
       <GifCard />
-      <h1>Gif<br></br>Searcher</h1>
-      <SearchField /> 
-      <h1>Trending</h1>
       <Trending />
+      <SearchField /> 
+      
+      </div>
     </div>
   ); 
 }

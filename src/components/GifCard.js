@@ -1,45 +1,53 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+
 class GifCard extends Component {
     constructor(){
         super();
         this.state = {
-            gifURL: []
+            random: [],
+            show: false
         }
     }
- 
-    async componentDidMount(){
-        const url = 'http://api.giphy.com/v1/gifs/random?api_key=d9yzq75PA0Fdy2XP84jqHK2mLIxw4H2k';
-        const response = await fetch(url);
-        console.log(response);
-        const gifData = await response.json();
-        this.setState({
-            gifURL: gifData.data
-        });  
-        console.log(this.state.gifURL);
+
+   handleRandom = () =>{
+    const API_KEY = "HJ7Y0riiQ86ysZe4Vh0Qq8uNClbRBAJS";
+    const url = "http://api.giphy.com/v1/gifs/random?api_key=" + API_KEY;
+     axios
+       .get(url)
+       .then((response) =>{
+         this.setState({show: true})
+         this.setState({random: response.data.data});
+         
+       })
+       .catch((err) => {
+        this.setState({show: false})
+         console.log(err);
+       });
+      // this.setState({show: true})
+   }
+
+    render(){
+    
+    let display;
+        
+    if(this.state.show === true ){
+        display = <img className='gifDisplay' src ={this.state.random.image_url}/>
+    }
+    if(this.state.show === false){
+        display = null
+        
     }
 
-    randomGif = async () =>{
-        const url = 'http://api.giphy.com/v1/gifs/random?api_key=d9yzq75PA0Fdy2XP84jqHK2mLIxw4H2k';
-        const response = await fetch(url);
-        console.log(response);
-        const gifData = await response.json();
-        this.setState({
-            gifURL: gifData.data
-        });  
-        console.log(this.state.gifURL);
-    }
-    
-    render(){
-    return (
-        <div>
-            <h1>Gif<br></br> Randomizer</h1>
-            <br></br>
-            <button onClick={this.randomGif}>Generate a Random Gif!</button>
-            <br></br><br></br>
+        return (
+        <div className="random">
+           
+            <button onClick={this.handleRandom}>Random</button>
+           
                 <div>
-                    <img className='gifDisplay' src ={this.state.gifURL.image_url} alt = 'gif'/>
+                    {display}
                 </div>
-            {/* This will be a map of all gifs to display */} 
+           
         </div>
     )
 }
